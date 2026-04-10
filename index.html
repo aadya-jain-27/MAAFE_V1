@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAAFE — Your Personal Finance Assistant</title>
+<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/auth.css?v=14">
+</head>
+<body class="auth-body">
+
+  <div class="auth-split">
+
+    <!-- LEFT PANEL — branding -->
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="brand-logo">M</div>
+        <div class="brand-name">MAAFE</div>
+        <div class="brand-tagline">Your AI-powered money companion</div>
+      </div>
+      <div class="auth-features">
+        <div class="auth-feat">
+          <span class="feat-icon">📧</span>
+          <div>
+            <div class="feat-title">Reads your bank emails</div>
+            <div class="feat-desc">Just forward your bank alerts — we do the rest</div>
+          </div>
+        </div>
+        <div class="auth-feat">
+          <span class="feat-icon">🤖</span>
+          <div>
+            <div class="feat-title">5 AI agents watching your money</div>
+            <div class="feat-desc">Spending, Risk, Investment, Tax &amp; Compliance</div>
+          </div>
+        </div>
+        <div class="auth-feat">
+          <span class="feat-icon">💬</span>
+          <div>
+            <div class="feat-title">Ask anything, get plain answers</div>
+            <div class="feat-desc">No jargon. Just clear advice in your language</div>
+          </div>
+        </div>
+        <div class="auth-feat">
+          <span class="feat-icon">🎯</span>
+          <div>
+            <div class="feat-title">Goal-based planning</div>
+            <div class="feat-desc">Home, car, vacation — we'll help you get there</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL — forms -->
+    <div class="auth-right">
+      <div class="auth-card">
+
+        <!-- TABS -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('login')">Log In</button>
+          <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="tab-login" class="auth-form active">
+          <h2 class="auth-heading">Welcome back!</h2>
+          <p class="auth-sub">Log in to check on your finances</p>
+
+          <div class="form-group">
+            <label class="form-label">Email address</label>
+            <input type="email" class="form-input" id="login-email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" id="login-pwd" placeholder="Enter your password">
+          </div>
+
+          <button class="btn-auth" onclick="doLogin()">Log In →</button>
+
+          <div class="auth-demo-hint">
+            <span>Trying this out?</span>
+            <button onclick="demoLogin()" class="link-btn">Use demo account</button>
+          </div>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="tab-signup" class="auth-form">
+          <h2 class="auth-heading">Let's get started!</h2>
+          <p class="auth-sub">Takes less than 2 minutes to set up</p>
+
+          <div class="form-group">
+            <label class="form-label">Your name</label>
+            <input type="text" class="form-input" id="signup-name" placeholder="e.g. Priya Sharma">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email address</label>
+            <input type="email" class="form-input" id="signup-email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Create a password</label>
+            <input type="password" class="form-input" id="signup-pwd" placeholder="At least 8 characters">
+          </div>
+
+          <button class="btn-auth" onclick="doSignup()">Create My Account →</button>
+        </div>
+
+      </div><!-- end auth-card -->
+    </div><!-- end auth-right -->
+
+  </div><!-- end auth-split -->
+
+<script src="js/auth.js?v=14"></script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Finances — MAAFE</title>
+<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/dashboard.css?v=14">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body class="app-body">
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-left">
+    <div class="topnav-logo">M</div>
+    <span class="topnav-name">MAAFE</span>
+  </div>
+  <div class="topnav-center">
+    <button class="nav-pill active" onclick="showSection('home')">Home</button>
+    <button class="nav-pill" onclick="showSection('emails')">Bank Emails</button>
+    <button class="nav-pill" onclick="showSection('agents')">AI Agents</button>
+    <button class="nav-pill" onclick="showSection('goals')">My Goals</button>
+    <button class="nav-pill" onclick="showSection('advisor')">Ask Advisor</button>
+  </div>
+  <div class="topnav-right">
+    <div class="user-pill" id="user-greeting">Hi, User!</div>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="app-main">
+
+  <!-- ══════════════════════════════════
+       HOME SECTION
+  ══════════════════════════════════ -->
+  <section class="app-section active" id="section-home">
+
+    <!-- greeting bar -->
+    <div class="greeting-bar">
+      <div>
+        <h1 class="greeting-text" id="greeting-main">Good morning</h1>
+        <p class="greeting-sub" id="greeting-sub">Here's how your money is doing this month</p>
+      </div>
+      <div class="health-score-pill" id="health-pill" onclick="showSection('agents')">
+        <span class="health-score-label">Money Health</span>
+        <span class="health-score-val" id="health-val">—</span>
+        <span class="health-score-max">/100</span>
+      </div>
+    </div>
+
+    <!-- Summary cards - plain english -->
+    <div class="summary-strip">
+      <div class="summary-card green-card">
+        <div class="sum-card-label">You earned this month</div>
+        <div class="sum-card-val" id="stat-income">—</div>
+        <div class="sum-card-note" id="stat-income-note">Connect Gmail to see real data</div>
+      </div>
+      <div class="summary-card red-card">
+        <div class="sum-card-label">You spent this month</div>
+        <div class="sum-card-val" id="stat-expenses">—</div>
+        <div class="sum-card-note" id="stat-expenses-note">Across all categories</div>
+      </div>
+      <div class="summary-card blue-card">
+        <div class="sum-card-label">You saved this month</div>
+        <div class="sum-card-val" id="stat-surplus">—</div>
+        <div class="sum-card-note" id="stat-surplus-note">Your monthly surplus</div>
+      </div>
+      <div class="summary-card amber-card">
+        <div class="sum-card-label">Safety net covers</div>
+        <div class="sum-card-val" id="stat-safety">—</div>
+        <div class="sum-card-note" id="stat-safety-note">Goal: 3 months of expenses</div>
+      </div>
+    </div>
+
+    <!-- AI Insight Banner — filled by JS from real data -->
+    <div class="insight-banner" id="insight-banner">
+      <div class="insight-icon"></div>
+      <div class="insight-text">
+        <div class="insight-title" id="insight-title">Connect Gmail to see real insights</div>
+        <div class="insight-body" id="insight-body">Go to Bank Emails → Connect Gmail. Every number here will update to reflect your actual transactions.</div>
+      </div>
+      <button class="insight-action" onclick="showSection('emails')">Connect Now →</button>
+    </div>
+
+    <!-- Charts row -->
+    <div class="charts-row">
+      <div class="chart-card big">
+        <div class="chart-card-header">
+          <div class="chart-card-title">Where your money went this month</div>
+          <div class="chart-card-sub">Tap a slice to learn more</div>
+        </div>
+        <div class="chart-body">
+          <canvas id="spendPieChart"></canvas>
+        </div>
+        <div class="chart-legend" id="spend-legend"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-card-title">Savings over 6 months</div>
+          <div class="chart-card-sub">Your progress at a glance</div>
+        </div>
+        <canvas id="savingsTrendChart" height="180"></canvas>
+      </div>
+    </div>
+
+    <!-- Recent activity -->
+    <div class="section-card">
+      <div class="section-card-header">
+        <div class="section-card-title">Recent transactions</div>
+        <button class="see-all-btn" onclick="showSection('emails')">See all →</button>
+      </div>
+      <div class="txn-list" id="home-txn-list">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Recommendations in plain english -->
+    <div class="section-card">
+      <div class="section-card-header">
+        <div class="section-card-title">What your AI agents suggest</div>
+        <div class="section-card-sub">Personalised to your situation</div>
+      </div>
+      <div class="suggestions-list" id="suggestions-list">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════
+       EMAIL SECTION
+  ══════════════════════════════════ -->
+  <section class="app-section" id="section-emails">
+
+    <div class="page-header">
+      <h2 class="page-title">Import your bank emails</h2>
+      <p class="page-desc">Connect your Gmail to automatically import all bank transaction emails — or paste one manually below.</p>
+    </div>
+
+    <!-- ── GMAIL CONNECT CARD (Primary) ── -->
+    <div class="section-card" style="margin-bottom:20px;border:2px solid var(--blue-light,#bfdbfe);">
+      <div style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="font-size:36px;flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;">Connect Gmail — Import all bank emails automatically</div>
+          <div id="gmail-status-text" style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Connect your Gmail account to fetch all bank transaction emails from the last 6 months in one click.</div>
+
+          <!-- Progress bar (hidden by default) -->
+          <div id="gmail-progress-bar" style="display:none;margin-bottom:12px;">
+            <div id="gmail-progress-text" style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Reading emails…</div>
+            <div style="height:6px;background:var(--border);border-radius:3px;">
+              <div class="gmail-progress-fill" style="height:6px;background:var(--blue);border-radius:3px;width:0%;transition:width .3s;"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <button id="gmail-connect-btn" class="btn-primary gmail-btn" onclick="connectGmail()">Connect Gmail</button>
+            <div id="gmail-status-dot" class="gmail-status-dot"></div>
+            <span style="font-size:12px;color:var(--text-muted);">Reads only — never sends or modifies your emails</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="email-layout">
+
+      <!-- LEFT: Manual input -->
+      <div class="email-input-col">
+
+        <div class="section-card">
+          <div class="section-card-title" style="margin-bottom:6px;">Manual option — paste an email</div>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">Don't want to connect Gmail? Paste individual bank alert emails here.</p>
+
+          <div style="margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">Pick your bank:</div>
+            <div class="bank-selector" id="bank-selector"></div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">Load a sample email:</div>
+            <div id="sample-emails-list"></div>
+          </div>
+
+          <textarea id="email-paste" class="email-textarea" placeholder="Paste your bank alert email here…"></textarea>
+          <button class="btn-primary" style="width:100%;margin-top:10px;" onclick="parseEmail()">Parse this email</button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Output + history -->
+      <div class="email-output-col">
+
+        <div class="section-card">
+          <div class="section-card-title" style="margin-bottom:14px;">Parsed result</div>
+          <div id="parse-output-empty" style="text-align:center;padding:30px 0;color:var(--text-muted);">
+            <div style="font-size:32px;margin-bottom:8px;"></div>
+            <div style="font-size:13px;">Paste an email or connect Gmail to see results</div>
+          </div>
+          <div id="parse-output" style="display:none;"></div>
+        </div>
+
+        <div class="section-card" style="margin-top:14px;">
+          <div class="section-card-header">
+            <div class="section-card-title">Transaction history</div>
+            <div class="section-card-sub" id="txn-count">0 transactions</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;font-size:12px;">
+            <span id="user-data-label" style="color:var(--text-muted);">⚠ No real data — connect Gmail or paste emails</span>
+            <button onclick="confirmClearData()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--text-muted);cursor:pointer;">Clear</button>
+          </div>
+          <div class="txn-list" id="email-txn-list"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ── Gmail Setup Modal ── -->
+  <div id="gmail-setup-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:var(--bg-card);border-radius:16px;padding:28px;max-width:520px;width:90%;border:1px solid var(--border);">
+      <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:16px;">🔧 How to set up Gmail integration</div>
+      <div style="font-size:13px;color:var(--text-sec);line-height:1.75;">
+        <p style="margin-bottom:10px;"><strong>One-time setup (10 minutes):</strong></p>
+        <ol style="padding-left:18px;margin-bottom:16px;">
+          <li>Go to <strong>console.cloud.google.com</strong> and create a project</li>
+          <li>Search "Gmail API" → Enable it</li>
+          <li>Go to <strong>OAuth consent screen</strong> → External → add scope <code>gmail.readonly</code></li>
+          <li>Go to <strong>Credentials</strong> → Create OAuth 2.0 Client ID → Web application</li>
+          <li>Add your domain to Authorized JavaScript origins</li>
+          <li>Copy the Client ID, open <strong>js/config.js</strong> and paste it as <code>GOOGLE_CLIENT_ID</code></li>
+          <li>Reload the app — the "Connect Gmail" button will work</li>
+        </ol>
+        <p style="color:var(--text-muted);font-size:12px;">Your Gmail credentials are never stored. The app only reads email content to find bank transaction alerts.</p>
+      </div>
+      <button class="btn-primary" style="width:100%;margin-top:16px;" onclick="closeSetupModal()">Got it</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       AGENTS SECTION
+  ══════════════════════════════════ -->
+  <section class="app-section" id="section-agents">
+
+    <div class="page-header">
+      <h2 class="page-title">Your AI money team</h2>
+      <p class="page-desc">5 specialised agents work together behind the scenes, each looking at a different part of your financial life. Click any agent to see what it found.</p>
+    </div>
+
+    <!-- Agent cards - plain language -->
+    <div class="agents-row">
+
+      <div class="agent-bubble active" id="abubble-spending" onclick="selectAgent('spending')">
+        <div class="agent-bub-icon">SW</div>
+        <div class="agent-bub-name">Spending Watcher</div>
+        <div class="agent-bub-role">Tracks where your money goes</div>
+        <div class="agent-bub-status green">Active</div>
+      </div>
+
+      <div class="agent-bubble" id="abubble-risk" onclick="selectAgent('risk')">
+        <div class="agent-bub-icon">SG</div>
+        <div class="agent-bub-name">Safety Guard</div>
+        <div class="agent-bub-role">Checks if you're financially safe</div>
+        <div class="agent-bub-status green">Active</div>
+      </div>
+
+      <div class="agent-bubble" id="abubble-investment" onclick="selectAgent('investment')">
+        <div class="agent-bub-icon">GA</div>
+        <div class="agent-bub-name">Growth Advisor</div>
+        <div class="agent-bub-role">Helps your money grow</div>
+        <div class="agent-bub-status amber">Standby</div>
+      </div>
+
+      <div class="agent-bubble" id="abubble-tax" onclick="selectAgent('tax')">
+        <div class="agent-bub-icon">TS</div>
+        <div class="agent-bub-name">Tax Saver</div>
+        <div class="agent-bub-role">Finds legal ways to pay less tax</div>
+        <div class="agent-bub-status green">Active</div>
+      </div>
+
+      <div class="agent-bubble" id="abubble-compliance" onclick="selectAgent('compliance')">
+        <div class="agent-bub-icon">RC</div>
+        <div class="agent-bub-name">Rule Checker</div>
+        <div class="agent-bub-role">Makes sure everything is legal</div>
+        <div class="agent-bub-status amber">Standby</div>
+      </div>
+
+    </div>
+
+    <!-- Agent detail panel -->
+    <div class="agent-detail-panel" id="agent-detail">
+      <div class="adp-left">
+        <div class="adp-header" id="adp-header">
+          <span class="adp-icon" id="adp-icon">SW</span>
+          <div>
+            <div class="adp-title" id="adp-title">Spending Watcher</div>
+            <div class="adp-subtitle" id="adp-subtitle">Tracks where your money goes</div>
+          </div>
+        </div>
+        <div id="adp-static-content">
+          <!-- filled by JS -->
+        </div>
+      </div>
+      <div class="adp-right">
+        <div class="adp-ai-header">
+          <div class="adp-ai-title">What this agent says about your finances</div>
+          <div class="adp-ai-sub">AI-generated analysis based on your data</div>
+        </div>
+        <div id="adp-ai-output" class="adp-ai-output">
+          <div class="adp-placeholder">Click "Get Analysis" to see what this agent thinks about your money situation.</div>
+        </div>
+        <button class="btn-primary" style="width:100%;margin-top:14px;" onclick="runAgentAI()">Get Analysis</button>
+      </div>
+    </div>
+
+    <!-- Negotiation section -->
+    <div class="section-card" style="margin-top:20px;">
+      <div class="section-card-header">
+        <div>
+          <div class="section-card-title">⚖️ How your agents reach a decision</div>
+          <div class="section-card-sub">Watch them debate and agree on the best plan for you</div>
+        </div>
+        <button class="btn-primary" onclick="runNegotiation()">Watch them debate →</button>
+      </div>
+      <div class="neg-log" id="neg-log">
+        <div style="color:var(--text-muted);text-align:center;padding:30px;">Click the button above to see your AI agents discuss your finances</div>
+      </div>
+      <div id="consensus-result" style="display:none;margin-top:14px;">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════
+       GOALS SECTION
+  ══════════════════════════════════ -->
+  <section class="app-section" id="section-goals">
+
+    <div class="page-header">
+      <h2 class="page-title">Your financial goals</h2>
+      <p class="page-desc">See how you're tracking and simulate different scenarios to reach your goals faster.</p>
+    </div>
+
+    <!-- Goals progress -->
+    <div class="goals-grid" id="goals-grid">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Simulator -->
+    <div class="section-card" style="margin-top:20px;">
+      <div class="section-card-title" style="margin-bottom:4px;"> "What if" simulator</div>
+      <div class="section-card-sub" style="margin-bottom:18px;">Play around with numbers and see how it changes your future</div>
+
+      <div class="sim-layout">
+        <div class="sim-controls">
+
+          <div class="sim-slider-group">
+            <div class="sim-label">
+              <span>I save this much every month</span>
+              <strong id="sip-display">₹15,000</strong>
+            </div>
+            <input type="range" min="1000" max="50000" step="1000" value="15000" id="s-sip" oninput="updateSim()">
+          </div>
+
+          <div class="sim-slider-group">
+            <div class="sim-label">
+              <span>Expected yearly growth</span>
+              <strong id="ret-display">12%</strong>
+            </div>
+            <input type="range" min="4" max="20" step="1" value="12" id="s-ret" oninput="updateSim()">
+          </div>
+
+          <div class="sim-slider-group">
+            <div class="sim-label">
+              <span>For how many years</span>
+              <strong id="yr-display">10 years</strong>
+            </div>
+            <input type="range" min="1" max="30" step="1" value="10" id="s-yr" oninput="updateSim()">
+          </div>
+
+          <div class="sim-result-grid">
+            <div class="sim-result-box green-card">
+              <div class="sim-res-label">You'll have</div>
+              <div class="sim-res-val" id="sim-corpus">₹34.6 L</div>
+            </div>
+            <div class="sim-result-box blue-card">
+              <div class="sim-res-label">You invested</div>
+              <div class="sim-res-val" id="sim-invested">₹18 L</div>
+            </div>
+            <div class="sim-result-box amber-card">
+              <div class="sim-res-label">Profit earned</div>
+              <div class="sim-res-val" id="sim-profit">₹16.6 L</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-chart-wrap">
+          <canvas id="simChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════
+       ADVISOR SECTION
+  ══════════════════════════════════ -->
+  <section class="app-section" id="section-advisor">
+
+    <div class="page-header">
+      <h2 class="page-title">Ask your financial advisor</h2>
+      <p class="page-desc">Ask anything about your money — in plain English. No jargon, no judgment.</p>
+    </div>
+
+    <div class="advisor-layout">
+
+      <div class="chat-panel">
+        <div class="chat-msgs" id="chat-msgs">
+          <div class="chat-msg ai">
+            <div class="chat-avatar">🤖</div>
+            <div class="chat-bubble">
+              Hello! I'm your personal financial advisor. I know your income, spending habits, goals, and financial situation — so I can give you advice that's actually relevant to <em>you</em>.<br><br>
+              Ask me anything — no question is too small or too basic!
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" class="chat-input" id="chat-input" placeholder="Type your question here..." onkeydown="if(event.key==='Enter') sendChat()">
+          <button class="btn-primary" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+
+      <div class="advisor-side">
+        <div class="section-card">
+          <div class="section-card-title" style="margin-bottom:12px;">💬 Try asking...</div>
+          <div class="quick-q-list">
+            <div class="quick-q" onclick="askQ('Am I spending too much on food?')">Am I spending too much on food?</div>
+            <div class="quick-q" onclick="askQ('How much should I be saving each month?')">How much should I be saving?</div>
+            <div class="quick-q" onclick="askQ('Explain my tax savings in simple terms')">Explain my tax savings simply</div>
+            <div class="quick-q" onclick="askQ('Is it safe to invest right now given my situation?')">Is it safe to invest right now?</div>
+            <div class="quick-q" onclick="askQ('How long will it take me to buy a home?')">How long to buy a home?</div>
+            <div class="quick-q" onclick="askQ('What should I do first with my extra savings?')">What to do with extra savings?</div>
+            <div class="quick-q" onclick="askQ('Explain what an emergency fund is and why I need one')">What is an emergency fund?</div>
+            <div class="quick-q" onclick="askQ('Give me a simple monthly budget I can actually follow')">Give me a simple budget</div>
+          </div>
+        </div>
+
+        <div class="section-card" style="margin-top:14px;">
+          <div class="section-card-title" style="margin-bottom:12px;">📊 Your quick summary</div>
+          <div class="advisor-stats">
+            <div class="adv-stat"><span class="adv-stat-l">Monthly income</span><span class="adv-stat-r green-text" id="adv-income">—</span></div>
+            <div class="adv-stat"><span class="adv-stat-l">Monthly spending</span><span class="adv-stat-r red-text" id="adv-expenses">—</span></div>
+            <div class="adv-stat"><span class="adv-stat-l">Money saved</span><span class="adv-stat-r blue-text" id="adv-surplus">—</span></div>
+            <div class="adv-stat"><span class="adv-stat-l">Safety net</span><span class="adv-stat-r amber-text" id="adv-safety">—</span></div>
+            <div class="adv-stat"><span class="adv-stat-l">Money health</span><span class="adv-stat-r green-text" id="adv-health-score">— / 100</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- Google Identity Services (for Gmail OAuth) -->
+<script src="https://accounts.google.com/gsi/client" async defer onload="if(window.initGmailAuth)initGmailAuth();"></script>
+<script src="js/config.js?v=14"></script>
+<script src="js/data.js?v=14"></script>
+<script src="js/gmail.js?v=14"></script>
+<script src="js/dashboard.js?v=14"></script>
+<script src="js/emailparser.js?v=14"></script>
+<script src="js/agents.js?v=14"></script>
+<script src="js/advisor.js?v=14"></script>
+<script src="js/charts.js?v=14"></script>
+</body>
+</html>

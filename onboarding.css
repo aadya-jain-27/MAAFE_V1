@@ -1,0 +1,227 @@
+/* ══════════════════════════════════════
+   Onboarding Styles
+   ══════════════════════════════════════ */
+
+.onboarding-body {
+  background: linear-gradient(160deg, #eff6ff 0%, #f4f6fb 60%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ob-container {
+  width: 100%;
+  max-width: 680px;
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(37,99,235,0.12);
+  border: 1px solid var(--border);
+}
+
+/* Progress bar */
+.ob-progress-bar {
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.ob-progress-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* Step dots */
+.ob-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  gap: 0;
+}
+.ob-step {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--border-md);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+.ob-step.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+.ob-step.done {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.ob-step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  max-width: 80px;
+}
+
+/* Step content */
+.ob-step-content {
+  display: none;
+  text-align: center;
+  animation: fadeSlide 0.3s ease;
+}
+.ob-step-content.active { display: block; }
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ob-emoji { font-size: 56px; margin-bottom: 16px; }
+.ob-title { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+.ob-desc { font-size: 15px; color: var(--text-sec); max-width: 480px; margin: 0 auto 32px; line-height: 1.6; }
+
+/* Options grid */
+.ob-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.ob-option {
+  padding: 16px 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg-card2);
+}
+.ob-option:hover { border-color: var(--blue); background: var(--blue-bg); }
+.ob-option.selected { border-color: var(--blue); background: var(--blue-bg); }
+.ob-option.selected .ob-opt-label { color: var(--blue); }
+.ob-opt-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.ob-opt-sub { font-size: 12px; color: var(--text-muted); }
+
+/* Banks grid */
+.ob-banks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.ob-bank {
+  padding: 20px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  background: var(--bg-card2);
+}
+.ob-bank:hover { border-color: var(--blue); background: var(--blue-bg); }
+.ob-bank.selected { border-color: var(--blue); background: var(--blue-bg); }
+.bank-logo {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  margin: 0 auto 10px;
+}
+.bank-logo.hdfc  { background: #004c8f; }
+.bank-logo.sbi   { background: #2e5fa3; }
+.bank-logo.icici { background: #f04e23; }
+.bank-logo.axis  { background: #97144d; }
+.bank-logo.kotak { background: #e31837; }
+.bank-logo.other { background: #6b7280; }
+.bank-name { font-size: 12px; font-weight: 600; color: var(--text-sec); }
+
+/* Goals grid */
+.ob-goals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.ob-goal {
+  padding: 18px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  background: var(--bg-card2);
+}
+.ob-goal:hover { border-color: var(--blue); background: var(--blue-bg); }
+.ob-goal.selected { border-color: var(--blue); background: var(--blue-bg); }
+.goal-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+.goal-label { font-size: 13px; font-weight: 600; color: var(--text-sec); }
+.ob-goal.selected .goal-label { color: var(--blue); }
+
+/* Summary cards */
+.ob-summary-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.ob-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-brd);
+  border-radius: var(--radius-md);
+}
+.ob-sum-icon { font-size: 28px; }
+.ob-sum-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.ob-sum-desc { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
+
+/* Navigation buttons */
+.ob-nav { display: flex; justify-content: space-between; margin-top: 4px; }
+.btn-ob {
+  padding: 13px 32px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-ob:hover { background: #1d4ed8; }
+.btn-ob:disabled { background: var(--border-md); color: var(--text-muted); cursor: not-allowed; }
+
+.btn-ob-back {
+  padding: 13px 20px;
+  background: transparent;
+  color: var(--text-sec);
+  border: 1.5px solid var(--border-md);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-ob-back:hover { border-color: var(--blue); color: var(--blue); }

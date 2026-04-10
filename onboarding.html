@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup — MAAFE</title>
+<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/onboarding.css?v=14">
+</head>
+<body class="onboarding-body">
+
+<div class="ob-container">
+
+  <!-- Progress bar -->
+  <div class="ob-progress-bar">
+    <div class="ob-progress-fill" id="ob-progress" style="width:20%"></div>
+  </div>
+
+  <!-- Step indicator -->
+  <div class="ob-steps">
+    <div class="ob-step active" id="step-dot-1">1</div>
+    <div class="ob-step-line"></div>
+    <div class="ob-step" id="step-dot-2">2</div>
+    <div class="ob-step-line"></div>
+    <div class="ob-step" id="step-dot-3">3</div>
+    <div class="ob-step-line"></div>
+    <div class="ob-step" id="step-dot-4">4</div>
+    <div class="ob-step-line"></div>
+    <div class="ob-step" id="step-dot-5">5</div>
+  </div>
+
+  <!-- ── STEP 1: Welcome ── -->
+  <div class="ob-step-content active" id="step-1">
+    <div class="ob-emoji">👋</div>
+    <h1 class="ob-title">Hi <span id="welcome-name">there</span>!</h1>
+    <p class="ob-desc">Let's take 2 minutes to set up your personal finance assistant. We'll ask you a few simple questions so we can give you advice that actually makes sense for your life.</p>
+    <button class="btn-ob" onclick="nextStep(2)">Let's Go! →</button>
+  </div>
+
+  <!-- ── STEP 2: Monthly Income ── -->
+  <div class="ob-step-content" id="step-2">
+    <div class="ob-emoji">💰</div>
+    <h1 class="ob-title">How much do you earn each month?</h1>
+    <p class="ob-desc">This helps us understand what's realistic for your budget. Don't worry — this stays private.</p>
+
+    <div class="ob-options-grid">
+      <div class="ob-option" onclick="selectOption(this, 'income', 'under25k', 'Under ₹25,000')">
+        <div class="ob-opt-label">Under ₹25,000</div>
+        <div class="ob-opt-sub">Starting out</div>
+      </div>
+      <div class="ob-option" onclick="selectOption(this, 'income', '25to50k', '₹25,000 – ₹50,000')">
+        <div class="ob-opt-label">₹25,000 – ₹50,000</div>
+        <div class="ob-opt-sub">Growing steady</div>
+      </div>
+      <div class="ob-option" onclick="selectOption(this, 'income', '50to1L', '₹50,000 – ₹1,00,000')">
+        <div class="ob-opt-label">₹50,000 – ₹1 Lakh</div>
+        <div class="ob-opt-sub">Doing well</div>
+      </div>
+      <div class="ob-option" onclick="selectOption(this, 'income', 'above1L', 'Above ₹1,00,000')">
+        <div class="ob-opt-label">Above ₹1 Lakh</div>
+        <div class="ob-opt-sub">High earner</div>
+      </div>
+    </div>
+
+    <div class="ob-nav">
+      <button class="btn-ob-back" onclick="nextStep(1)">← Back</button>
+      <button class="btn-ob" onclick="nextStep(3)" id="next-2" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: Bank ── -->
+  <div class="ob-step-content" id="step-3">
+    <div class="ob-emoji">🏦</div>
+    <h1 class="ob-title">Which bank do you mainly use?</h1>
+    <p class="ob-desc">We'll set up the email reader specifically for your bank's notification format.</p>
+
+    <div class="ob-banks-grid">
+      <div class="ob-bank" onclick="selectBank(this, 'HDFC')">
+        <div class="bank-logo hdfc">HDFC</div>
+        <div class="bank-name">HDFC Bank</div>
+      </div>
+      <div class="ob-bank" onclick="selectBank(this, 'SBI')">
+        <div class="bank-logo sbi">SBI</div>
+        <div class="bank-name">State Bank of India</div>
+      </div>
+      <div class="ob-bank" onclick="selectBank(this, 'ICICI')">
+        <div class="bank-logo icici">ICICI</div>
+        <div class="bank-name">ICICI Bank</div>
+      </div>
+      <div class="ob-bank" onclick="selectBank(this, 'AXIS')">
+        <div class="bank-logo axis">AXIS</div>
+        <div class="bank-name">Axis Bank</div>
+      </div>
+      <div class="ob-bank" onclick="selectBank(this, 'KOTAK')">
+        <div class="bank-logo kotak">KMB</div>
+        <div class="bank-name">Kotak Mahindra</div>
+      </div>
+      <div class="ob-bank" onclick="selectBank(this, 'OTHER')">
+        <div class="bank-logo other">?</div>
+        <div class="bank-name">Other Bank</div>
+      </div>
+    </div>
+
+    <div class="ob-nav">
+      <button class="btn-ob-back" onclick="nextStep(2)">← Back</button>
+      <button class="btn-ob" onclick="nextStep(4)" id="next-3" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: Goals ── -->
+  <div class="ob-step-content" id="step-4">
+    <div class="ob-emoji">🎯</div>
+    <h1 class="ob-title">What are you saving for?</h1>
+    <p class="ob-desc">Pick everything that applies. We'll build your plan around what matters to you.</p>
+
+    <div class="ob-goals-grid">
+      <div class="ob-goal" onclick="toggleGoal(this, 'emergency')">
+        <span class="goal-icon">🛡️</span>
+        <div class="goal-label">Emergency safety net</div>
+      </div>
+      <div class="ob-goal" onclick="toggleGoal(this, 'home')">
+        <span class="goal-icon">🏠</span>
+        <div class="goal-label">Buy a home</div>
+      </div>
+      <div class="ob-goal" onclick="toggleGoal(this, 'car')">
+        <span class="goal-icon">🚗</span>
+        <div class="goal-label">Buy a car</div>
+      </div>
+      <div class="ob-goal" onclick="toggleGoal(this, 'retire')">
+        <span class="goal-icon">🌅</span>
+        <div class="goal-label">Retire comfortably</div>
+      </div>
+      <div class="ob-goal" onclick="toggleGoal(this, 'travel')">
+        <span class="goal-icon">✈️</span>
+        <div class="goal-label">Travel the world</div>
+      </div>
+      <div class="ob-goal" onclick="toggleGoal(this, 'invest')">
+        <span class="goal-icon">📈</span>
+        <div class="goal-label">Grow my wealth</div>
+      </div>
+    </div>
+
+    <div class="ob-nav">
+      <button class="btn-ob-back" onclick="nextStep(3)">← Back</button>
+      <button class="btn-ob" onclick="nextStep(5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: All set ── -->
+  <div class="ob-step-content" id="step-5">
+    <div class="ob-emoji">🎉</div>
+    <h1 class="ob-title">You're all set!</h1>
+    <p class="ob-desc">Here's what we've prepared for you based on your answers:</p>
+
+    <div class="ob-summary-cards">
+      <div class="ob-summary-card">
+        <div class="ob-sum-icon">📧</div>
+        <div>
+          <div class="ob-sum-title">Email reader ready</div>
+          <div class="ob-sum-desc" id="sum-bank">Configured for your bank</div>
+        </div>
+      </div>
+      <div class="ob-summary-card">
+        <div class="ob-sum-icon">🤖</div>
+        <div>
+          <div class="ob-sum-title">5 AI agents activated</div>
+          <div class="ob-sum-desc">Working together to protect your money</div>
+        </div>
+      </div>
+      <div class="ob-summary-card">
+        <div class="ob-sum-icon">🎯</div>
+        <div>
+          <div class="ob-sum-title">Goals configured</div>
+          <div class="ob-sum-desc" id="sum-goals">Your goals have been saved</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-ob" onclick="finishOnboarding()">Take me to my dashboard! 🚀</button>
+  </div>
+
+</div><!-- end ob-container -->
+
+<script src="js/onboarding.js?v=14"></script>
+</body>
+</html>
